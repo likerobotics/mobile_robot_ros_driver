@@ -1,0 +1,19 @@
+<launch> 
+    <!-- <arg name="camera_config_file" default="$(find omnicar_ros_driver)/config/raspicam.yaml"/>
+    <arg name="use_range" default="true"/>
+    <arg name="use_camera" default="true"/> -->
+
+
+    <node name="example_node" pkg="omnicar_ros_driver" type="example.py" output="screen" />
+<!--     
+    <group if="$(arg use_range)">
+      <node name="range_sensor_node" pkg="omnicar_ros_driver" type="range_sensor_node.py" output="screen"></node>
+    </group>
+    
+    <group if="$(arg use_camera)">
+      <node name="usb_cam" pkg="usb_cam" type="usb_cam_node" output="screen" >
+      <rosparam command="load" file="$(arg camera_config_file)"/>
+    </node>
+    </group> -->
+
+</launch>
