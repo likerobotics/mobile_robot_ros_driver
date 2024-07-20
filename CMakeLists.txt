@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 2.8.3)
-project(omnicar_ros_driver)
+project(mobile_robot_ros_driver)
 
 find_package(catkin REQUIRED COMPONENTS
     controller_manager
@@ -33,8 +33,8 @@ target_link_libraries(${PROJECT_NAME}
   ${catkin_LIBRARIES} ${EXTRA_LIBS}
 )
 
-add_executable(omnicar_driver src/main.cpp)
-target_link_libraries(omnicar_driver ${PROJECT_NAME} ${catkin_LIBRARIES})
+add_executable(mobile_robot_ros_driver src/main.cpp)
+target_link_libraries(mobile_robot_ros_driver ${PROJECT_NAME} ${catkin_LIBRARIES})
 
 catkin_install_python(PROGRAMS scripts/range_sensor_node.py
   DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION})

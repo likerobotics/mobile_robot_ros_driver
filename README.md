@@ -1,1 +1,3 @@
-# omnicar_ros_driver
+# mobile_robot_ros_driver
+
+Данный  ROS пакет позволяет управлять роботом через последовательный порт. 

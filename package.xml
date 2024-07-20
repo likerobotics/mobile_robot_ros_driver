@@ -1,10 +1,10 @@
 <?xml version="1.0"?>
 <package format="2">
-    <name>omnicar_ros_driver</name>
+    <name>mobile_robot_ros_driver</name>
     <version>0.0.1</version>
-    <description>The omnicar_ros_driver package.</description>
+    <description>The mobile_robot_ros_driver package.</description>
 
-    <maintainer email="texnoman@itmo.ru"> TexnoMan (Vladislav Antipov)</maintainer>
+    <maintainer email="bia@itmo.ru"> likerobotics</maintainer>
     <license>MIT License</license>
 
     <buildtool_depend>catkin</buildtool_depend>

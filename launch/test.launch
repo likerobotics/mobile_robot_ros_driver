@@ -1,0 +1,5 @@
+<launch> 
+
+    <node name="serial_test" pkg="omnicar_ros_driver" type="serialtest.py" output="screen" />
+
+</launch>

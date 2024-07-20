@@ -61,7 +61,7 @@ class Example(object):
 
     def spin(self):
 
-        rate = rospy.Rate(30)
+        rate = rospy.Rate(60)
         t0 = rospy.get_time()
         while not rospy.is_shutdown():
             t = rospy.get_time() - t0
@@ -74,12 +74,10 @@ class Example(object):
             else:
                 self.command.linear.x = -0.1
                 self.command.linear.y = 0.0
-                self.command.angular.z = 0.4
-                self.cmd_vel.publish(self.command)
-                rospy.sleep(1)
+                self.command.angular.z = 0.0
 
             self.cmd_vel.publish(self.command)
-            rospy.loginfo("Control loop")
+
             rate.sleep()
 
 
