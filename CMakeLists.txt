@@ -7,6 +7,7 @@ find_package(catkin REQUIRED COMPONENTS
     joint_state_controller
     robot_state_publisher
     roscpp
+    rospy
     std_msgs
     tf
     geometry_msgs
@@ -24,17 +25,17 @@ include_directories(
 )
 
 # Declare a C++ library
-add_library(${PROJECT_NAME}
-    src/serial_communication.cpp
-    src/omnicar_ros.cpp 
-)
+# add_library(${PROJECT_NAME}
+#     src/serial_communication.cpp
+#     src/omnicar_ros.cpp 
+# )
 
 target_link_libraries(${PROJECT_NAME}
   ${catkin_LIBRARIES} ${EXTRA_LIBS}
 )
 
-add_executable(mobile_robot_ros_driver src/main.cpp)
-target_link_libraries(mobile_robot_ros_driver ${PROJECT_NAME} ${catkin_LIBRARIES})
+# add_executable(mobile_robot_ros_driver src/main.cpp)
+# target_link_libraries(mobile_robot_ros_driver ${PROJECT_NAME} ${catkin_LIBRARIES})
 
 catkin_install_python(PROGRAMS scripts/range_sensor_node.py
   DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION})

@@ -3,11 +3,11 @@
     <arg name="use_range" default="true"/>
     <arg name="use_camera" default="true"/> -->
 
-    <rosparam command="load" file="$(find omnicar_ros_driver)/config/omnicar.yaml" />  
+    <rosparam command="load" file="$(find mobile_robot_ros_driver)/config/omnicar.yaml" />  
     
-    <node name="omnicar_driver_node" pkg="omnicar_ros_driver" type="omnicar_driver" output="screen"></node>
+    <node name="car_driver_node" pkg="mobile_robot_ros_driver" type="serialdrive.py" output="screen" />
 
-    <!-- <node name="example_node" pkg="omnicar_ros_driver" type="example.py" output="screen" /> -->
+    <!-- <node name="example_controller_node" pkg="omnicar_ros_driver" type="example.py" output="screen" /> -->
 <!--     
     <group if="$(arg use_range)">
       <node name="range_sensor_node" pkg="omnicar_ros_driver" type="range_sensor_node.py" output="screen"></node>

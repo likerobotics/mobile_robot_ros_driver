@@ -1,0 +1,5 @@
+<launch> 
+
+    <node name="serial_test" pkg="mobile_robot_ros_driver" type="serialdrive.py" output="screen" />
+
+</launch>
