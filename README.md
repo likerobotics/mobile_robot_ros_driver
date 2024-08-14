@@ -7,3 +7,5 @@ serialdrive.py - драйвер, подключается к сериал и с�
 
 example.py - простой контроллер, отправляет управляющие команды драйверу.
 
+
+Related project [here](https://github.com/industrial-robotics-lab/OmniCar-arduino).
