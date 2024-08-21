@@ -24,15 +24,24 @@ include_directories(
     ${catkin_INCLUDE_DIRS}
 )
 
+if (CMAKE_VERSION VERSION_LESS 3.0)
+    PROJECT(RapidJSON CXX)
+else()
+    cmake_policy(SET CMP0048 NEW)
+    PROJECT(RapidJSON VERSION "${LIB_VERSION_STRING}" LANGUAGES CXX)
+endif()
+
+
+
 # Declare a C++ library
 # add_library(${PROJECT_NAME}
 #     src/serial_communication.cpp
 #     src/omnicar_ros.cpp 
 # )
 
-target_link_libraries(${PROJECT_NAME}
-  ${catkin_LIBRARIES} ${EXTRA_LIBS}
-)
+# target_link_libraries(${PROJECT_NAME}
+#   ${catkin_LIBRARIES} ${EXTRA_LIBS}
+# )
 
 # add_executable(mobile_robot_ros_driver src/main.cpp)
 # target_link_libraries(mobile_robot_ros_driver ${PROJECT_NAME} ${catkin_LIBRARIES})

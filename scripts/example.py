@@ -68,11 +68,11 @@ class Example(object):
 
             # check if there is no obstacles in forward robot direction
             if 1 > 0.7:
-                self.command.linear.x = 0.1
+                self.command.linear.x = 0.2
                 self.command.linear.y = 0.0
                 self.command.angular.z = 0.0
             else:
-                self.command.linear.x = -0.1
+                self.command.linear.x = -0.2
                 self.command.linear.y = 0.0
                 self.command.angular.z = 0.0
 

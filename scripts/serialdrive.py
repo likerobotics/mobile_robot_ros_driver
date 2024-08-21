@@ -25,7 +25,7 @@ global ser
 ser = serial.Serial()
 ser.baudrate = 38400
 #ser.port = com_name.get()
-ser.port = '/dev/ttyUSB0'
+ser.port = rospy.get_param('serial_port')
 # ser.port = '/dev/ttyUSB1'
 # ser.timeout = 20
 def crc8(data: bytes) -> int:
@@ -65,11 +65,11 @@ class Serial(object):
         # open serial
         ser.open()
         # print(ser.port, ser.is_open)
-        # print("Подключен к "+ ser.port)
+        # print("Connected to serial port: "+ ser.port)
         if ser.isOpen():
             ser.flushInput() #flush input buffer, discarding all its contents
             ser.flushOutput()#flush output buffer, aborting current output 
-            rospy.loginfo("Serial opened")
+            rospy.loginfo("Serial opened: %s", ser.port)
         else:
             rospy.loginfo("Serial failed")
 
@@ -97,11 +97,11 @@ class Serial(object):
         while not rospy.is_shutdown():
             t = rospy.get_time() - t0
             
-            # IF ROBOT IS SENDING SMTHG -- GETTING DATA
+            # IF ROBOT IS SENDING SMTHG -- PARSE INCOMING DATA
             if ser.in_waiting:
                 data = ser.readline()
                 # integer_value = data.decode('utf-8')
-                print('response: ', data, len(data), ', content:', data[:len(data)-2], 'check sum:', data[len(data)-2])
+                # print('Logging the response: ', data, len(data), ', content:', data[:len(data)-2], 'check sum:', data[len(data)-2])
                 if data != '' and len(data) == 46:
                     res = list(struct.unpack('fffffffffff', data[:len(data)-2])) # for the fynalsystem
                     my_bytes = b''
@@ -127,7 +127,7 @@ class Serial(object):
                     ser.flushInput()
             else:
                 if ser.is_open and self.new_target_available:
-                    print('If target updated I have send it to robot')
+                    # print('time to send data to the robot')
                     my_bytes = b''
                     result = []
                     nums = []
@@ -143,10 +143,9 @@ class Serial(object):
                     my_bytes+=b'\n'
                     #write to serial
                     res_bytes = ser.write(my_bytes)
-                    # print("written bytes for update--->", res_bytes)
                     # print('unpacked: ', list(struct.iter_unpack('fff', my_bytes[:len(my_bytes)-2])))
                     # print('as bytes: ', my_bytes)
-                    rospy.loginfo("target_updated")
+                    # rospy.loginfo("target_updated")
                     self.new_target_available = False
                 else:
                     pass
