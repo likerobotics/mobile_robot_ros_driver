@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 import os
+import tf
 import rospy
 import cv2
 from cv_bridge import CvBridge
@@ -47,14 +48,16 @@ class Serial(object):
         rospy.loginfo("Serial test loaging")
         rospy.on_shutdown(self.shutdown)
 
+        self.tf_publisher = tf.TransformBroadcaster()
+
         self.cmd_pub = rospy.Publisher("/cmd_vel", Twist, queue_size=3)
         self.cmd_vel = rospy.Subscriber("/cmd_vel", Twist, self.cmd_callback)
         self.odom_publisher = rospy.Publisher("/odom", Odometry, queue_size=3)
 
-        self.left_front_wheel = rospy.Publisher("/state/pos/left_front_wheel", Float64, queue_size=3)
-        self.right_front_wheel = rospy.Publisher("/state/pos/right_front_wheel", Float64, queue_size=3)
-        self.left_rear_wheel = rospy.Publisher("/state/pos/left_rear_wheel", Float64, queue_size=3)
-        self.right_rear_wheel = rospy.Publisher("/state/pos/right_rear_wheel", Float64, queue_size=3)
+        # self.left_front_wheel = rospy.Publisher("/state/pos/left_front_wheel", Float64, queue_size=3)
+        # self.right_front_wheel = rospy.Publisher("/state/pos/right_front_wheel", Float64, queue_size=3)
+        # self.left_rear_wheel = rospy.Publisher("/state/pos/left_rear_wheel", Float64, queue_size=3)
+        # self.right_rear_wheel = rospy.Publisher("/state/pos/right_rear_wheel", Float64, queue_size=3)
         # self.range_front_subscriber = rospy.Subscriber("/range/front", Range, self.range_front_callback)
 
         self.odometry = Odometry()
@@ -77,7 +80,6 @@ class Serial(object):
         pass
 
     def shutdown(self):
-        # stop robots here
         rospy.loginfo("ROS shutdown")
         self.cmd_pub.publish(Twist())
 
@@ -108,26 +110,26 @@ class Serial(object):
                     for i in res:
                         my_bytes+= struct.pack('<f', i)
                     if data[len(data)-2] == crc8(my_bytes):
-                        self.left_front_wheel.publish(res[0])
-                        self.right_front_wheel.publish(res[1])
-                        self.left_rear_wheel.publish(res[2])
-                        self.right_rear_wheel.publish(res[3])
+                        # self.left_front_wheel.publish(res[0])
+                        # self.right_front_wheel.publish(res[1])
+                        # self.left_rear_wheel.publish(res[2])
+                        # self.right_rear_wheel.publish(res[3])
                         self.odometry.pose.pose.position.x = res[9]
                         self.odometry.pose.pose.position.y = res[10]
 
-                        rot = Rotation.from_euler('xyz', [0, 0, res[8]], degrees=True)
+                        rot = Rotation.from_euler('xyz', [0, 0, res[8]], degrees=False)
                         rot_quat = rot.as_quat()
                         self.odometry.pose.pose.orientation.w = rot_quat[3]
                         self.odometry.pose.pose.orientation.x = rot_quat[0]
                         self.odometry.pose.pose.orientation.y = rot_quat[1]
                         self.odometry.pose.pose.orientation.z = rot_quat[2]
-                        self.odom_publisher.publish(self.odometry)
+                        #print(f'x: {res[9]}, y: {res[10]}, theta: {res[8]}')
                         
                 else:
                     ser.flushInput()
             else:
                 if ser.is_open and self.new_target_available:
-                    # print('time to send data to the robot')
+                    #print('time to send data to the robot')
                     my_bytes = b''
                     result = []
                     nums = []
@@ -146,10 +148,16 @@ class Serial(object):
                     # print('unpacked: ', list(struct.iter_unpack('fff', my_bytes[:len(my_bytes)-2])))
                     # print('as bytes: ', my_bytes)
                     # rospy.loginfo("target_updated")
-                    self.new_target_available = False
+                    #self.new_target_available = False
                 else:
                     pass
-            
+            self.odometry.header.frame_id = 'odom'
+            self.odometry.child_frame_id = 'base_link'
+            self.odometry.header.stamp = rospy.Time.now()
+            self.odom_publisher.publish(self.odometry)
+            self.tf_publisher.sendTransform((self.odometry.pose.pose.position.x, self.odometry.pose.pose.position.y, self.odometry.pose.pose.position.z),
+             (self.odometry.pose.pose.orientation.x, self.odometry.pose.pose.orientation.y, self.odometry.pose.pose.orientation.z, self.odometry.pose.pose.orientation.w),
+              rospy.Time.now(), 'base_link', 'odom')
             rate.sleep()
 
 
